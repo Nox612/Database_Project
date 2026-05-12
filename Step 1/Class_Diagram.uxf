@@ -1,0 +1,148 @@
+<diagram program="umletino" version="15.1"><zoom_level>8</zoom_level><element><id>UMLClass</id><coordinates><x>112</x><y>256</y><w>224</w><h>272</h></coordinates><panel_attributes>Artist
+--
+-name : String
+-bio : String
+-birthYear : Integer
+-disciplines : List&lt;Discipline&gt;
+-contactEmail : String
+-phone : String
+-city : String
+-website : String
+-socialMedia : String
+-isActive : boolean
+-artWorks : List&lt;Artwork&gt;
+--
++&lt;&lt;constructor&gt;&gt;Artist()
++&lt;&lt;constructor&gt;&gt;Artist(name : String,
+bio : String, birthYear : Integer,
+contactEmail : String, city : String)
++addArtwork(artwork : Artwork)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>496</x><y>256</y><w>312</w><h>232</h></coordinates><panel_attributes>Artwork
+--
+-title : String
+-creationYear : Integer
+-type : String
+-medium : String
+-dimensions : String
+-description : String
+-price : double
+-status : Status
+-artist : Artist
+-tags : List&lt;ArtworkTags&gt;
+--
++&lt;&lt;constructor&gt;&gt;Artwork()
++&lt;&lt;constructor&gt;&gt;Artwork(title : String, creationYear : Integer,
+type : String, price : double, artist : Artist,)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>384</x><y>520</y><w>152</w><h>64</h></coordinates><panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Status
+--
+FOR_SALE
+SOLD
+EXHIBITED</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>328</x><y>296</y><w>184</w><h>40</h></coordinates><panel_attributes>lt=-
+m1=1..1
+m2=1..n
+makes &gt;</panel_attributes><additional_attributes>10;20;210;20</additional_attributes></element><element><id>Relation</id><coordinates><x>408</x><y>464</y><w>104</w><h>72</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>110;10;10;10;10;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>912</x><y>256</y><w>304</w><h>272</h></coordinates><panel_attributes>Exhibition
+--
+-title : String
+-startDate : LocalDate
+-endDate : LocalDate
+-description : String
+-gallery : Gallery
+-curatorName : String
+-theme : String
+-artworks : List&lt;Artwork&gt;
+--
++&lt;&lt;constructor&gt;&gt;Exhibition()
++&lt;&lt;constructor&gt;&gt;Exhibition(title : String, startDate : LocalDate,
+endDate : LocalDate, gallery : Gallery)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1296</x><y>488</y><w>224</w><h>184</h></coordinates><panel_attributes>Gallery
+--
+-name : String
+-address : String
+-ownerName : String
+-openingHours : String
+-contactPhone : String
+-rating : double
+-website : String
+-exhibitions : List&lt;Exhibition&gt;
+--
++&lt;&lt;constructor&gt;&gt;Gallery()
++&lt;&lt;constructor&gt;&gt;Gallery(name : String,
+address : String, rating : double)
++addExhibition(exhibition : Exhibition)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>832</x><y>880</y><w>288</w><h>168</h></coordinates><panel_attributes>Booking
+--
+-workshop : Workshop
+-member : CommunityMember
+-bookingDate : LocalDateTime
+-paymentStatus : String
+--
++&lt;&lt;constructor&gt;&gt;Booking()
++&lt;&lt;constructor&gt;&gt;Booking(workshop : Workshop,
+member : CommunityMember)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>688</x><y>968</y><w>160</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>180;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>544</x><y>160</y><w>24</w><h>112</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;120;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>504</x><y>0</y><w>208</w><h>168</h></coordinates><panel_attributes>ArtworkTag
+--
+-name : String
+--
++&lt;&lt;constructor&gt;&gt;ArtworkTag()
++&lt;&lt;constructor&gt;&gt;ArtworkTag(name : String)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>880</y><w>336</w><h>264</h></coordinates><panel_attributes>CommunityMember
+--
+-name : String
+-email : String
+-birthYear : Integer
+-phone : String
+-city : String
+-favoriteDisciplines : List&lt;Discipline&gt;
+-membershipType : String
+-bookings : List&lt;Booking&gt;
+-reviews : List&lt;Review&gt;
+--
++&lt;&lt;constructor&gt;&gt;CommunityMember()
++&lt;&lt;constructor&gt;&gt;CommunityMember(name : String, email : String)
++addBooking(booking : Booking)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>1256</y><w>208</w><h>168</h></coordinates><panel_attributes>Discipline
+--
+-name : String
+--
++&lt;&lt;constructor&gt;&gt;Discipline()
++&lt;&lt;constructor&gt;&gt;Discipline(name : String)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>408</x><y>1136</y><w>24</w><h>136</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;150</additional_attributes></element><element><id>Relation</id><coordinates><x>1208</x><y>376</y><w>216</w><h>128</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=1..1
+is in &gt;
+&lt; exposes</panel_attributes><additional_attributes>10;20;230;20;230;140</additional_attributes></element><element><id>Relation</id><coordinates><x>800</x><y>336</y><w>128</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>140;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>584</x><y>600</y><w>296</w><h>208</h></coordinates><panel_attributes>Review
+--
+-reviewer : CommunityMember
+-artwork : Artwork
+-rating : int
+-comment : String
+-reviewDate : LocalDate
+--
++&lt;&lt;constructor&gt;&gt;Review()
++&lt;&lt;constructor&gt;&gt;Review(reviewer : CommunityMember,
+artwork : Artwork, rating : int, comment : String)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>496</x><y>768</y><w>104</w><h>128</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=1..1
+leaves &gt;</panel_attributes><additional_attributes>110;10;10;10;10;140</additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>480</y><w>56</w><h>136</h></coordinates><panel_attributes>lt=-
+m1=1..1
+m2=0..n
+rates &gt;</panel_attributes><additional_attributes>10;10;10;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>600</y><w>336</w><h>248</h></coordinates><panel_attributes>Workshop
+--
+-title : String
+-date : LocalDateTime
+-durationMinutes : int
+-maxParticipants : int
+-price : double
+-instructor : Artist
+-location : String
+-description : String
+-level : String
+--
++&lt;&lt;constructor&gt;&gt;Workshop()
++&lt;&lt;constructor&gt;&gt;Workshop(title : String, date : LocalDateTime,
+instructor : Artist, price : double)
++toString() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>32</x><y>488</y><w>96</w><h>128</h></coordinates><panel_attributes>lt=-
+m1=1..1
+m2=0..n
+&lt; animates</panel_attributes><additional_attributes>100;10;10;10;10;140</additional_attributes></element></diagram>
