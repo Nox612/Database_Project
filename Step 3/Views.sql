@@ -1,3 +1,4 @@
+Use ArtGallery_DB;
 -- VIEWS
 
 -- Only public info of artists
