@@ -3,7 +3,7 @@ package com.project.artconnect.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import com.project.artconnect.config.*;
+import static com.project.artconnect.config.DatabaseConfig.*;
 
 /**
  * Utility class to manage JDBC connections.
@@ -18,7 +18,7 @@ public class ConnectionManager {
      * @throws SQLException if connection fails
      */
     public static Connection getConnection() throws SQLException {
-        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
         if (conn != null)
             return conn;
         throw new UnsupportedOperationException("ConnectionManager.getConnection() not implemented — see TODO");

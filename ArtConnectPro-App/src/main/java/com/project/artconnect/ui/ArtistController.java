@@ -10,20 +10,20 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ArtistController {
-    @FXML
-    private TextField searchField;
-    @FXML
-    private ComboBox<Discipline> disciplineFilter;
-    @FXML
-    private TableView<Artist> artistTable;
-    @FXML
-    private TableColumn<Artist, String> nameColumn;
-    @FXML
-    private TableColumn<Artist, String> cityColumn;
-    @FXML
-    private TableColumn<Artist, String> emailColumn;
-    @FXML
-    private TableColumn<Artist, Integer> yearColumn;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<Discipline> disciplineFilter;
+
+    @FXML private TableView<Artist> artistTable;
+    @FXML private TableColumn<Artist, String> nameColumn;
+    @FXML private TableColumn<Artist, String> cityColumn;
+    @FXML private TableColumn<Artist, String> emailColumn;
+    @FXML private TableColumn<Artist, Integer> yearColumn;
+
+    // New FXML elements for CRUD
+    @FXML private TextField nameInput;
+    @FXML private TextField cityInput;
+    @FXML private TextField emailInput;
+    @FXML private TextField yearInput;
 
     private final ArtistService artistService = ServiceProvider.getArtistService();
 
@@ -35,7 +35,73 @@ public class ArtistController {
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("birthYear"));
 
         disciplineFilter.setItems(FXCollections.observableArrayList(artistService.getAllDisciplines()));
+
+        // Listen for selection changes and show the artist details in the form
+        artistTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> showArtistDetails(newValue));
+
         refreshTable();
+    }
+
+    private void showArtistDetails(Artist artist) {
+        if (artist != null) {
+            nameInput.setText(artist.getName());
+            cityInput.setText(artist.getCity());
+            emailInput.setText(artist.getContactEmail());
+            yearInput.setText(artist.getBirthYear() != null ? String.valueOf(artist.getBirthYear()) : "");
+        } else {
+            nameInput.clear();
+            cityInput.clear();
+            emailInput.clear();
+            yearInput.clear();
+        }
+    }
+
+    @FXML
+    private void handleAdd() {
+        Artist newArtist = new Artist();
+        newArtist.setName(nameInput.getText());
+        newArtist.setCity(cityInput.getText());
+        newArtist.setContactEmail(emailInput.getText());
+        try {
+            newArtist.setBirthYear(Integer.parseInt(yearInput.getText()));
+        } catch (NumberFormatException e) {
+            newArtist.setBirthYear(null);
+        }
+
+        // Persist to Database
+        artistService.createArtist(newArtist);
+        refreshTable();
+        showArtistDetails(null); // Clear form
+    }
+
+    @FXML
+    private void handleUpdate() {
+        Artist selectedArtist = artistTable.getSelectionModel().getSelectedItem();
+        if (selectedArtist != null) {
+            selectedArtist.setName(nameInput.getText());
+            selectedArtist.setCity(cityInput.getText());
+            selectedArtist.setContactEmail(emailInput.getText());
+            try {
+                selectedArtist.setBirthYear(Integer.parseInt(yearInput.getText()));
+            } catch (NumberFormatException e) {
+                selectedArtist.setBirthYear(null);
+            }
+
+            // Update in Database
+            artistService.updateArtist(selectedArtist);
+            refreshTable();
+        }
+    }
+
+    @FXML
+    private void handleDelete() {
+        Artist selectedArtist = artistTable.getSelectionModel().getSelectedItem();
+        if (selectedArtist != null) {
+            // Delete from Database
+            artistService.deleteArtist(selectedArtist.getName());
+            refreshTable();
+        }
     }
 
     @FXML
@@ -54,6 +120,7 @@ public class ArtistController {
     }
 
     private void refreshTable() {
+        // Fetches fresh data from the Database
         artistTable.setItems(FXCollections.observableArrayList(artistService.getAllArtists()));
     }
 }

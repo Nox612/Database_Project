@@ -22,4 +22,13 @@
             <TableColumn fx:id="yearColumn" text="Birth Year" prefWidth="100" />
         </columns>
     </TableView>
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <TextField fx:id="nameInput" promptText="Name" />
+        <TextField fx:id="cityInput" promptText="City" />
+        <TextField fx:id="emailInput" promptText="Email" />
+        <TextField fx:id="yearInput" promptText="Birth Year" prefWidth="80" />
+        <Button text="Add" onAction="#handleAdd" />
+        <Button text="Update" onAction="#handleUpdate" />
+        <Button text="Delete" onAction="#handleDelete" />
+    </HBox>
 </VBox>
