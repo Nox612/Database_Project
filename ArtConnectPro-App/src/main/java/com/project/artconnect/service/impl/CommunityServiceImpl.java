@@ -33,4 +33,19 @@ public class CommunityServiceImpl implements CommunityService {
         if (member == null) return Collections.emptyList();
         return member.getReviews();
     }
+
+    @Override
+    public void createMember(CommunityMember member) {
+        communityMemberDao.save(member);
+    }
+
+    @Override
+    public void updateMember(CommunityMember member) {
+        communityMemberDao.update(member);
+    }
+
+    @Override
+    public void deleteMember(String name) {
+        communityMemberDao.delete(name);
+    }
 }

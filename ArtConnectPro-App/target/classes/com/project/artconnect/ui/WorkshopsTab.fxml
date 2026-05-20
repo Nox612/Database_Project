@@ -17,4 +17,14 @@
             <TableColumn fx:id="levelColumn" text="Level" prefWidth="100" />
         </columns>
     </TableView>
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <TextField fx:id="titleInput" promptText="Title" />
+        <TextField fx:id="priceInput" promptText="Price" prefWidth="80" />
+        <TextField fx:id="levelInput" promptText="Level" prefWidth="100" />
+        <DatePicker fx:id="dateInput" promptText="Date" prefWidth="120" />
+        <TextField fx:id="instructorInput" promptText="Instructor Name" />
+        <Button text="Add" onAction="#handleAdd" />
+        <Button text="Update" onAction="#handleUpdate" />
+        <Button text="Delete" onAction="#handleDelete" />
+    </HBox>
 </VBox>

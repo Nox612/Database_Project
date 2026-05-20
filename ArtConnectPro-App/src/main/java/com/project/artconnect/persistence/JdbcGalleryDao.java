@@ -74,4 +74,44 @@ public class JdbcGalleryDao implements GalleryDao {
 
         return gallery;
     }
+
+    @Override
+    public void save(Gallery gallery) {
+        String sql = "INSERT INTO GALLERY (Name, Address, Rating) VALUES (?, ?, ?)";
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, gallery.getName());
+            pstmt.setString(2, gallery.getAddress());
+            pstmt.setDouble(3, gallery.getRating());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Gallery gallery) {
+        String sql = "UPDATE GALLERY SET Address = ?, Rating = ? WHERE Name = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, gallery.getAddress());
+            pstmt.setDouble(2, gallery.getRating());
+            pstmt.setString(3, gallery.getName());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(String name) {
+        String sql = "DELETE FROM GALLERY WHERE Name = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

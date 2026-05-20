@@ -16,4 +16,13 @@
             <TableColumn fx:id="themeColumn" text="Theme" prefWidth="180" />
         </columns>
     </TableView>
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <TextField fx:id="titleInput" promptText="Title" />
+        <TextField fx:id="themeInput" promptText="Theme" />
+        <DatePicker fx:id="dateInput" promptText="Start Date" prefWidth="120" />
+        <TextField fx:id="galleryInput" promptText="Gallery Name" />
+        <Button text="Add" onAction="#handleAdd" />
+        <Button text="Update" onAction="#handleUpdate" />
+        <Button text="Delete" onAction="#handleDelete" />
+    </HBox>
 </VBox>

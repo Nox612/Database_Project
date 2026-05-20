@@ -1,8 +1,7 @@
 package com.project.artconnect.ui;
 
 import com.project.artconnect.model.Exhibition;
-import com.project.artconnect.model.Gallery;
-import com.project.artconnect.service.GalleryService;
+import com.project.artconnect.service.ExhibitionService;
 import com.project.artconnect.util.ServiceProvider;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -11,8 +10,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import com.project.artconnect.model.Gallery;
 
 public class ExhibitionController {
     @FXML
@@ -25,8 +25,17 @@ public class ExhibitionController {
     private TableColumn<Exhibition, String> themeColumn;
     @FXML
     private TableColumn<Exhibition, String> galleryColumn;
+    @FXML
+    private TextField titleInput;
+    @FXML
+    private TextField themeInput;
+    @FXML
+    private DatePicker dateInput;
+    @FXML
+    private TextField galleryInput;
 
-    private final GalleryService galleryService = ServiceProvider.getGalleryService();
+    // Use ExhibitionService instead of GalleryService!
+    private final ExhibitionService exhibitionService = ServiceProvider.getExhibitionService();
 
     @FXML
     public void initialize() {
@@ -38,13 +47,50 @@ public class ExhibitionController {
                 cellData.getValue().getGallery() != null ? cellData.getValue().getGallery().getName() : "Unknown"));
 
         refreshData();
+        exhibitionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> showExhibitionDetails(newV));
     }
 
     private void refreshData() {
-        List<Exhibition> all = new ArrayList<>();
-        for (Gallery g : galleryService.getAllGalleries()) {
-            all.addAll(g.getExhibitions());
+        // Fetch directly from the Database using the Exhibition Service!
+        exhibitionTable.setItems(FXCollections.observableArrayList(exhibitionService.getAllExhibitions()));
+    }
+
+    private void showExhibitionDetails(Exhibition exhibition) {
+        if (exhibition != null) {
+            titleInput.setText(exhibition.getTitle());
+            themeInput.setText(exhibition.getTheme());
+            dateInput.setValue(exhibition.getStartDate());
+            galleryInput.setText(exhibition.getGallery() != null ? exhibition.getGallery().getName() : "");
+        } else {
+            titleInput.clear(); themeInput.clear(); dateInput.setValue(null); galleryInput.clear();
         }
-        exhibitionTable.setItems(FXCollections.observableArrayList(all));
+    }
+
+    @FXML private void handleAdd() {
+        Exhibition e = new Exhibition();
+        e.setTitle(titleInput.getText());
+        e.setTheme(themeInput.getText());
+        e.setStartDate(dateInput.getValue());
+        Gallery g = new Gallery(); g.setName(galleryInput.getText());
+        e.setGallery(g);
+        exhibitionService.createExhibition(e);
+        refreshData(); showExhibitionDetails(null);
+    }
+
+    @FXML private void handleUpdate() {
+        Exhibition e = exhibitionTable.getSelectionModel().getSelectedItem();
+        if (e != null) {
+            e.setTheme(themeInput.getText());
+            exhibitionService.updateExhibition(e);
+            refreshData();
+        }
+    }
+
+    @FXML private void handleDelete() {
+        Exhibition e = exhibitionTable.getSelectionModel().getSelectedItem();
+        if (e != null) {
+            exhibitionService.deleteExhibition(e.getTitle());
+            refreshData();
+        }
     }
 }

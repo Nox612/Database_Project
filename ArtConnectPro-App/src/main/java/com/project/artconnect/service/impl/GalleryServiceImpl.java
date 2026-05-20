@@ -34,4 +34,19 @@ public class GalleryServiceImpl implements GalleryService {
         // Assuming the DAO populates the gallery's exhibitions list
         return gallery.getExhibitions();
     }
+
+    @Override
+    public void createGallery(Gallery gallery) {
+        galleryDao.save(gallery);
+    }
+
+    @Override
+    public void updateGallery(Gallery gallery) {
+        galleryDao.update(gallery);
+    }
+
+    @Override
+    public void deleteGallery(String name) {
+        galleryDao.delete(name);
+    }
 }

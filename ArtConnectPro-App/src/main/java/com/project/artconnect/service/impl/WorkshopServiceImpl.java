@@ -43,4 +43,19 @@ public class WorkshopServiceImpl implements WorkshopService {
         if (member == null) return Collections.emptyList();
         return member.getBookings();
     }
+
+    @Override
+    public void createWorkshop(Workshop workshop) {
+        workshopDao.save(workshop);
+    }
+
+    @Override
+    public void updateWorkshop(Workshop workshop) {
+        workshopDao.update(workshop);
+    }
+
+    @Override
+    public void deleteWorkshop(String title) {
+        workshopDao.delete(title);
+    }
 }

@@ -1,0 +1,35 @@
+package com.project.artconnect.service.impl;
+
+import com.project.artconnect.dao.ExhibitionDao;
+import com.project.artconnect.model.Exhibition;
+import com.project.artconnect.service.ExhibitionService;
+
+import java.util.List;
+
+public class ExhibitionServiceImpl implements ExhibitionService {
+    private final ExhibitionDao exhibitionDao;
+
+    public ExhibitionServiceImpl(ExhibitionDao exhibitionDao) {
+        this.exhibitionDao = exhibitionDao;
+    }
+
+    @Override
+    public List<Exhibition> getAllExhibitions() {
+        return exhibitionDao.findAll();
+    }
+
+    @Override
+    public void createExhibition(Exhibition exhibition) {
+        exhibitionDao.save(exhibition);
+    }
+
+    @Override
+    public void updateExhibition(Exhibition exhibition) {
+        exhibitionDao.update(exhibition);
+    }
+
+    @Override
+    public void deleteExhibition(String title) {
+        exhibitionDao.delete(title);
+    }
+}

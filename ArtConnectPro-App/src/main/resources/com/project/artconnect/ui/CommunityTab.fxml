@@ -15,4 +15,12 @@
             <TableColumn fx:id="cityColumn" text="City" prefWidth="150" />
         </columns>
     </TableView>
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <TextField fx:id="nameInput" promptText="Name" />
+        <TextField fx:id="emailInput" promptText="Email" />
+        <TextField fx:id="cityInput" promptText="City" />
+        <Button text="Add" onAction="#handleAdd" />
+        <Button text="Update" onAction="#handleUpdate" />
+        <Button text="Delete" onAction="#handleDelete" />
+    </HBox>
 </VBox>

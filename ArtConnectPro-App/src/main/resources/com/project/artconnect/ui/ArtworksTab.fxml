@@ -17,4 +17,14 @@
             <TableColumn fx:id="statusColumn" text="Status" prefWidth="150" />
         </columns>
     </TableView>
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <TextField fx:id="titleInput" promptText="Title" />
+        <TextField fx:id="typeInput" promptText="Type" prefWidth="100" />
+        <TextField fx:id="priceInput" promptText="Price" prefWidth="80" />
+        <ComboBox fx:id="statusInput" promptText="Status" prefWidth="100" />
+        <TextField fx:id="artistInput" promptText="Artist Name" />
+        <Button text="Add" onAction="#handleAdd" />
+        <Button text="Update" onAction="#handleUpdate" />
+        <Button text="Delete" onAction="#handleDelete" />
+    </HBox>
 </VBox>

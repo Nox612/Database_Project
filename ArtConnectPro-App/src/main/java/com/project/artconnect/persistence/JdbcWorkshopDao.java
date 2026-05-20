@@ -87,16 +87,87 @@ public class JdbcWorkshopDao implements WorkshopDao {
             workshop.setInstructor(instructor);
         }
 
-        /* Fields that DO NOT exist in the database schema:
-         * durationMinutes, maxParticipants, location, description.
-         * We do not attempt to read them from the ResultSet to avoid SQL errors.
-         * They will default to 0 or null in the Java object.
-         */
-
         return workshop;
     }
 
-    // --- Note for complete CRUD ---
-    // If you need to implement save() or update() in the future, remember that you will need to
-    // INSERT into WORKSHOP_INFO first, get the generated WS_ID, and then INSERT the Date into WORKSHOP_SCHEDULE.
+    @Override
+    public void save(Workshop workshop) {
+        String infoSql = "INSERT INTO WORKSHOP_INFO (Title, InstructorID, Price, Level) VALUES (?, ?, ?, ?)";
+        String schedSql = "INSERT INTO WORKSHOP_SCHEDULE (WS_ID, Date) VALUES (?, ?)";
+        try (Connection conn = ConnectionManager.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                int wsId = -1;
+                try (PreparedStatement infoStmt = conn.prepareStatement(infoSql, Statement.RETURN_GENERATED_KEYS)) {
+                    infoStmt.setString(1, workshop.getTitle());
+
+                    Integer artistId = getArtistIdByName(conn, workshop.getInstructor() != null ? workshop.getInstructor().getName() : null);
+                    if (artistId != null) infoStmt.setInt(2, artistId);
+                    else throw new SQLException("Instructor must exist in the DB.");
+
+                    infoStmt.setDouble(3, workshop.getPrice());
+                    infoStmt.setString(4, workshop.getLevel());
+                    infoStmt.executeUpdate();
+
+                    try (ResultSet keys = infoStmt.getGeneratedKeys()) {
+                        if (keys.next()) wsId = keys.getInt(1);
+                    }
+                }
+
+                if (wsId != -1 && workshop.getDate() != null) {
+                    try (PreparedStatement scheduleStmt = conn.prepareStatement(schedSql)) {
+                        scheduleStmt.setInt(1, wsId);
+                        scheduleStmt.setDate(2, Date.valueOf(workshop.getDate().toLocalDate()));
+                        scheduleStmt.executeUpdate();
+                    }
+                }
+                conn.commit();
+            } catch (SQLException ex) {
+                conn.rollback();
+                ex.printStackTrace();
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Workshop workshop) {
+        String sql = "UPDATE WORKSHOP_INFO SET Price = ?, Level = ? WHERE Title = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, workshop.getPrice());
+            pstmt.setString(2, workshop.getLevel());
+            pstmt.setString(3, workshop.getTitle());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(String title) {
+        String sql = "DELETE FROM WORKSHOP_INFO WHERE Title = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, title);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Helper method (Required for Save to find InstructorID)
+    private Integer getArtistIdByName(Connection conn, String name) throws SQLException {
+        if (name == null || name.trim().isEmpty()) return null;
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT ArtistID FROM ARTIST WHERE Name = ?")) {
+            stmt.setString(1, name);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt("ArtistID");
+            }
+        }
+        return null;
+    }
 }

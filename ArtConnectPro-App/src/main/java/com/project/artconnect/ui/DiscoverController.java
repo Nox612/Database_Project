@@ -1,37 +1,38 @@
 package com.project.artconnect.ui;
 
 import com.project.artconnect.model.Exhibition;
-import com.project.artconnect.model.Gallery;
 import com.project.artconnect.model.Workshop;
-import com.project.artconnect.service.GalleryService;
+import com.project.artconnect.service.ExhibitionService;
 import com.project.artconnect.service.WorkshopService;
 import com.project.artconnect.util.ServiceProvider;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DiscoverController {
     @FXML
     private FlowPane discoverPane;
 
-    private final GalleryService galleryService = ServiceProvider.getGalleryService();
+    // 1. Replace GalleryService with ExhibitionService
+    private final ExhibitionService exhibitionService = ServiceProvider.getExhibitionService();
     private final WorkshopService workshopService = ServiceProvider.getWorkshopService();
 
     @FXML
     public void initialize() {
-        // Collect some exhibitions from galleries
-        List<Exhibition> featuredExhibitions = new ArrayList<>();
-        for (Gallery g : galleryService.getAllGalleries()) {
-            featuredExhibitions.addAll(g.getExhibitions());
-            if (featuredExhibitions.size() >= 3)
-                break;
-        }
+        // 2. Fetch exhibitions directly from the database via ExhibitionService
+        List<Exhibition> allExhibitions = exhibitionService.getAllExhibitions();
 
-        featuredExhibitions.stream().limit(3).forEach(this::addExhibitionCard);
-        workshopService.getAllWorkshops().stream().limit(3).forEach(this::addWorkshopCard);
+        // 3. Take up to 3 exhibitions and create cards for them
+        allExhibitions.stream()
+                .limit(3)
+                .forEach(this::addExhibitionCard);
+
+        // (Workshops were already working fine)
+        workshopService.getAllWorkshops().stream()
+                .limit(3)
+                .forEach(this::addWorkshopCard);
     }
 
     private void addExhibitionCard(Exhibition e) {
